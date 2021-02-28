@@ -22,8 +22,8 @@ public class Main {
 
 
         field.set(hello, "ABCDE");
-        Object o = field.get(hello);
-        System.out.println(o);
+
+        System.out.println(field.get(hello));
 
     }
 

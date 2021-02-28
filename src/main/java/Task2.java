@@ -1,8 +1,8 @@
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Modifier;
+
 
 
 public class Task2 {
@@ -17,10 +17,6 @@ public class Task2 {
 
         Class<?> aClass = o.getClass();
 
-        Map<Integer, String> map = new HashMap<>();
-        map.put(1, "public");
-        map.put(2, "private");
-        map.put(4, "protected");
 
 
         Field[] fields = aClass.getDeclaredFields();
@@ -28,17 +24,18 @@ public class Task2 {
 
 
         for (Field field : fields) {
-            int modifiers = field.getModifiers();
-            String modif = map.get(modifiers);
+            int modifiers = field.getDeclaringClass().getModifiers();
+
 
             Object b = declaredConstructor.newInstance();
             Field fieldResult = aClass.getDeclaredField(field.getName());
+            if (!fieldResult.isAnnotationPresent(Ignorre.class)) {
 
             fieldResult.setAccessible(true);
             Object value = fieldResult.get(b);
 
-            if (!fieldResult.isAnnotationPresent(Ignorre.class)) {
-                System.out.println("Модификатор: " + modif + " Имя класса - " + fieldResult.getName() + "; Значение: " + value);
+
+                System.out.println("Модификатор: " + (Modifier.toString(modifiers)) + " Имя класса - " + fieldResult.getName() + "; Значение: " + value);
             }
         }
     }
